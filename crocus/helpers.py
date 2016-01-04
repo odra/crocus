@@ -74,7 +74,7 @@ class RouteDict(Dict):
     path = key.replace('%s:' % method, '')
     route = self.data.get(path)
     if route and method in route['methods']:
-      return (self.data[path]['handler'], {})
+      return (self.data[path]['methods'][method], {})
     match = None
     for item in self.data:
       match = re.match('^%s$' % self.data[item]['regex'], path)
@@ -83,20 +83,19 @@ class RouteDict(Dict):
         break
     if match is None:
       return (None, None)
-    return (route['handler'], dict(zip(route['params'], match.groups())))
+    return (route['methods'][method], dict(zip(route['params'], match.groups())))
 
   def __setitem__(self, key, value):
     method = key.split(':')[0]
     path = key.replace('%s:' % method, '')
     if not path in self.data:
       self.data[path] = {
-        'methods': [],
+        'methods': {},
         'regex': self.parse_path(path),
-        'params': [item.replace(':', '') for item in path.split('/') if item.startswith(':')],
-        'handler': value
+        'params': [item.replace(':', '') for item in path.split('/') if item.startswith(':')]
       }
     if not method in self.data[path]['methods']:
-      self.data[path]['methods'].append(method)
+      self.data[path]['methods'][method] = value
 
   def parse_path(self, path):
     output = ['']
@@ -112,3 +111,16 @@ class RouteDict(Dict):
       return '/'
     return '/'.join(output)
 
+
+class BaseError(Exception):
+  def __init__(self):
+    self.status = 400
+    self.data = {}
+    self.content_type = 'application/json'
+
+  def __repr__(self):
+    params = (self.__class__.__name__, self.status, self.data)
+    return '<%s (status=%s, data=%s)>' % params
+
+  def as_response(self):
+    return json.dumps(self.data)

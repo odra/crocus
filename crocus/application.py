@@ -6,12 +6,14 @@ from crocus.helpers import RouteDict, DynamicObject
 
 class Application(object):
   def __init__(self, loop=asyncio.get_event_loop(), handlers=RouteDict(), middlewares=[], **kwargs):
-    input_keys = ('loop', 'handlers', 'middlewares')
     self.loop = loop
     self.handlers = handlers
     self.middlewares = middlewares
-    self.config = DynamicObject.from_dict({k:kwargs[k] for k in kwargs if not k in input_keys})
+    self.config = DynamicObject()
     self.set_default_config()
+    self.errors = []
+    for item in kwargs:
+      setattr(self.config, item, kwargs[item])
   
   def __repr__(self):
     params = (self.loop, self.handlers, self.middlewares, self.config)
@@ -19,6 +21,9 @@ class Application(object):
 
   def set_default_config(self):
     self.config.default_encoding = 'utf8'
+
+  def error(self, *args):
+    [self.errors.append(item) for item in args]
 
   def use(self, *args):
     [self.middlewares.append(item) for item in args]

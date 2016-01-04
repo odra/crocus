@@ -1,7 +1,10 @@
 from crocus import Crocus
-from . import handlers, middlewares
+from . import handlers, middlewares, errors
 
 app = Crocus()
+
+#errors
+app.error(errors.SomeError)
 
 #root routes
 app.get('/', handlers.root.root)

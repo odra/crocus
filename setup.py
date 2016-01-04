@@ -2,7 +2,7 @@ from setuptools import setup
 
 options = {
   'name': 'crocus',
-  'version': '0.1.0',
+  'version': '0.2.0',
   'description': 'Python async http framework with asyncio + aiohttp (requires 3.5+)',
   'url': 'https://github.com/goldark/crocus',
   'author': 'Leonardo Rossetti',
