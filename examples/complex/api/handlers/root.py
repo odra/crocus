@@ -1,8 +1,6 @@
 import json
-from api import errors
 
 async def root(req, res):
-  raise errors.SomeError()
   data = {
     'resource': 'root',
     'path': '/'

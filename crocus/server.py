@@ -1,7 +1,7 @@
 import aiohttp.server
 from crocus.request import Request
 from crocus.response import Response
-from crocus.helpers import RouteDict, DynamicObject, BaseError
+from crocus.helpers import RouteDict, DynamicObject
 
 
 class Server(aiohttp.server.ServerHttpProtocol):
@@ -10,12 +10,6 @@ class Server(aiohttp.server.ServerHttpProtocol):
     self.handlers = kwargs.get('handlers', RouteDict())
     self.middlewares = kwargs.get('middlewares', [])
     self.config = kwargs.get('config', DynamicObject())
-
-  async def handle_error(self, err, res):
-    res.status = err.status
-    res.header('Content-Type', err.content_type)
-    res.write(err.as_response())
-    await res.end()
 
   async def handle_request(self, message, payload):
     req_input = {
@@ -39,22 +33,10 @@ class Server(aiohttp.server.ServerHttpProtocol):
     response.header('Content-Type', 'application/json')
     if handler:
       for item in self.middlewares:
-        try:
-          middleware = await item(request, response)
-        except BaseError as e:
-          await self.handle_error(e, response)   
-          return
-        except Exception as e:
-          raise e
+        middleware = await item(request, response)
         if middleware == Response.FINISH_CODE:
           return
-      try:
         await handler(request, response)
-      except BaseError as e:
-        await self.handle_error(e, response)
-        return
-      except Exception as e:
-        raise e
       return
     response.status = 404
     response.send_headers()

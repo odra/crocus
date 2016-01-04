@@ -1,10 +1,8 @@
+import sys;sys.path.append('../../')
 from crocus import Crocus
-from . import handlers, middlewares, errors
+from . import handlers, middlewares
 
 app = Crocus()
-
-#errors
-app.error(errors.SomeError)
 
 #root routes
 app.get('/', handlers.root.root)

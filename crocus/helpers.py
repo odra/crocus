@@ -111,16 +111,3 @@ class RouteDict(Dict):
       return '/'
     return '/'.join(output)
 
-
-class BaseError(Exception):
-  def __init__(self):
-    self.status = 400
-    self.data = {}
-    self.content_type = 'application/json'
-
-  def __repr__(self):
-    params = (self.__class__.__name__, self.status, self.data)
-    return '<%s (status=%s, data=%s)>' % params
-
-  def as_response(self):
-    return json.dumps(self.data)
