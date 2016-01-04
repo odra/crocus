@@ -9,6 +9,8 @@ http://crocus.readthedocs.org/
 
 ## Examples
 
+Check the examples folder for a full application sample.
+
 ### Basic
 
 ```python

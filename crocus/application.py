@@ -21,6 +21,7 @@ class Application(object):
 
   def set_default_config(self):
     self.config.default_encoding = 'utf8'
+    self.config.debug = True
 
   def error(self, *args):
     [self.errors.append(item) for item in args]
@@ -61,14 +62,14 @@ class Application(object):
   def connect(self, path, fn):
     self.add_handler('connect', path, fn)
   
-  def run(self, **kwargs):
+  def run(self, host='127.0.0.1', port=5000, **kwargs):
     debug = kwargs.get('debug', True)
     keep_alive = kwargs.get('keep_alive', 75)
-    host = kwargs.get('host', '127.0.0.1')
-    port = kwargs.get('port', 5000)
     self.config.debug = debug
     self.config.host = host
     self.config.port = port
+    self.config.debug = debug
+    self.config.keep_alive = keep_alive
     server_input = {
       'debug': debug,
       'keep_alive': keep_alive,
