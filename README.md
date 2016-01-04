@@ -5,7 +5,7 @@ A small and experimental async web microframework built on top of aiohttp (requi
 
 ## Documentation
 
-Coming soon.
+[http://crocus.readthedocs.org/]
 
 ## Examples
 
