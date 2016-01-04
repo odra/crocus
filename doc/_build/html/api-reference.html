@@ -1,0 +1,484 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>2. API Reference &mdash; crocus 0.1 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="crocus 0.1 documentation" href="index.html"/>
+        <link rel="next" title="3. Examples" href="examples.html"/>
+        <link rel="prev" title="1. Introduction" href="introduction.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> crocus
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">1. Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">2. API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#application">2.1. Application</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#handlers">2.2. Handlers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#middlewares">2.3. Middlewares</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#request">2.4. Request</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#response">2.5. Response</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#server">2.6. Server</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#helpers">2.7. Helpers</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">3. Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">4. Changelog</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">crocus</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>2. API Reference</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/api-reference.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="api-reference">
+<span id="api-reference-ref-label"></span><h1>2. API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="application">
+<h2>2.1. Application<a class="headerlink" href="#application" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="crocus.application.Application">
+<em class="property">class </em><code class="descclassname">crocus.application.</code><code class="descname">Application</code><span class="sig-paren">(</span><em>loop=asyncio.get_event_loop()</em>, <em>handlers=RouteDict()</em>, <em>middlewares=[]</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="crocus.application.Application.loop">
+<code class="descname">loop</code><a class="headerlink" href="#crocus.application.Application.loop" title="Permalink to this definition">¶</a></dt>
+<dd><p>evento loop to be used</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="crocus.application.Application.handlers">
+<code class="descname">handlers</code><a class="headerlink" href="#crocus.application.Application.handlers" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used to store route handlers.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="crocus.application.Application.middlewares">
+<code class="descname">middlewares</code><a class="headerlink" href="#crocus.application.Application.middlewares" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stores application middlewares.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="crocus.application.Application.config">
+<code class="descname">config</code><a class="headerlink" href="#crocus.application.Application.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>All values used in <a href="#id1"><span class="problematic" id="id2">**</span></a>kwargs will be stored in this property.</p>
+<p>Usefull to store session keys, database objects, etc.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.application.Application.add_handler">
+<code class="descname">add_handler</code><span class="sig-paren">(</span><em>method</em>, <em>path</em>, <em>fn</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.add_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a handler for a given http method and path.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.application.Application.use">
+<code class="descname">use</code><span class="sig-paren">(</span><em>fn</em>, <em>fn...*args</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.use" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds function(s) handle as a middleware.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.application.Application.middleware">
+<code class="descname">middleware</code><span class="sig-paren">(</span><em>fn</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.middleware" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as &#8220;use&#8221; method, but should be used as a decorator</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.application.Application.post">
+<code class="descname">post</code><span class="sig-paren">(</span><em>path</em>, <em>fn</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.post" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a post handler for a given path.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.application.Application.get">
+<code class="descname">get</code><span class="sig-paren">(</span><em>path</em>, <em>fn</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a get handler for a given path.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.application.Application.put">
+<code class="descname">put</code><span class="sig-paren">(</span><em>path</em>, <em>fn</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.put" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a put handler for a given path.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.application.Application.delete">
+<code class="descname">delete</code><span class="sig-paren">(</span><em>path</em>, <em>fn</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a delete handler for a given path.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.application.Application.patch">
+<code class="descname">patch</code><span class="sig-paren">(</span><em>path</em>, <em>fn</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.patch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a patch handler for a given path.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.application.Application.head">
+<code class="descname">head</code><span class="sig-paren">(</span><em>path</em>, <em>fn</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.head" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a head handler for a given path.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.application.Application.options">
+<code class="descname">options</code><span class="sig-paren">(</span><em>path</em>, <em>fn</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a options handler for a given path.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.application.Application.trace">
+<code class="descname">trace</code><span class="sig-paren">(</span><em>path</em>, <em>fn</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.trace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a trace handler for a given path.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.application.Application.connect">
+<code class="descname">connect</code><span class="sig-paren">(</span><em>path</em>, <em>fn</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a connect handler for a given path.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.application.Application.run">
+<code class="descname">run</code><span class="sig-paren">(</span><em>host='127.0.0.1'</em>, <em>port=5000</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the application in a given host and port.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="handlers">
+<h2>2.2. Handlers<a class="headerlink" href="#handlers" title="Permalink to this headline">¶</a></h2>
+<p>Every request handler is a python async function which uses two arguments: a request and a response.</p>
+</div>
+<div class="section" id="middlewares">
+<h2>2.3. Middlewares<a class="headerlink" href="#middlewares" title="Permalink to this headline">¶</a></h2>
+<p>Middlewares use the same async functions as handlers, but they are executed before the handler itself.</p>
+<p>Middlewares are useful for changing or validating request data.You can also end a request in a middleware before it reaches the designated handler, in this case the middleware functions needs to return the &#8220;finish&#8221; method from the response object (otherwise the request will go on).</p>
+</div>
+<div class="section" id="request">
+<h2>2.4. Request<a class="headerlink" href="#request" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="crocus.request.Request">
+<em class="property">class </em><code class="descclassname">crocus.request.</code><code class="descname">Request</code><span class="sig-paren">(</span><em>method=None</em>, <em>path=None</em>, <em>headers={}</em>, <em>body=None</em>, <em>params={}</em>, <em>content_type=None</em>, <em>params=DynamicObject()</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.request.Request" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="crocus.request.Request.method">
+<code class="descname">method</code><a class="headerlink" href="#crocus.request.Request.method" title="Permalink to this definition">¶</a></dt>
+<dd><p>request http method</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="crocus.request.Request.path">
+<code class="descname">path</code><a class="headerlink" href="#crocus.request.Request.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>http request path (without query string)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="crocus.request.Request.headers">
+<code class="descname">headers</code><a class="headerlink" href="#crocus.request.Request.headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>http request headers in key:value format, it is not case sensitive whilte retrieving a header.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="crocus.request.Request.query">
+<code class="descname">query</code><a class="headerlink" href="#crocus.request.Request.query" title="Permalink to this definition">¶</a></dt>
+<dd><p>url query string in a key:value (dict) format.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="crocus.request.Request.body">
+<code class="descname">body</code><a class="headerlink" href="#crocus.request.Request.body" title="Permalink to this definition">¶</a></dt>
+<dd><p>request content body</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="crocus.request.Request.content_type">
+<code class="descname">content_type</code><a class="headerlink" href="#crocus.request.Request.content_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>request body content-type (if any). default is application/octet-stream</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="crocus.request.Request.params">
+<code class="descname">params</code><a class="headerlink" href="#crocus.request.Request.params" title="Permalink to this definition">¶</a></dt>
+<dd><p>DynamicObject that stores dyanmic url parameters.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.request.Request.prepare">
+<code class="descname">prepare</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crocus.request.Request.prepare" title="Permalink to this definition">¶</a></dt>
+<dd><p>async method that prepares the request (parse headers, path, body, etc)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.request.Request.parse_headers">
+<code class="descname">parse_headers</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crocus.request.Request.parse_headers" title="Permalink to this definition">¶</a></dt>
+<dd><p>parses the http headers (called by prepare)</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.request.Request.parse_path">
+<code class="descname">parse_path</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crocus.request.Request.parse_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>parses the request path (route params, query string, etc)</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="response">
+<h2>2.5. Response<a class="headerlink" href="#response" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="crocus.response.Response">
+<em class="property">class </em><code class="descclassname">crocus.response.</code><code class="descname">Response</code><a class="headerlink" href="#crocus.response.Response" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="crocus.response.Response.status">
+<code class="descname">status</code><a class="headerlink" href="#crocus.response.Response.status" title="Permalink to this definition">¶</a></dt>
+<dd><p>response http status code</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.response.Response.header">
+<code class="descname">header</code><span class="sig-paren">(</span><em>key</em>, <em>value=None</em>, <em>defaults=None</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.response.Response.header" title="Permalink to this definition">¶</a></dt>
+<dd><p>HTTP response reader manipultion.</p>
+<p>If only key is provided it return its value (returns the default value is not found).</p>
+<p>It sets a header value if provided with a key and value.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.response.Response.write">
+<code class="descname">write</code><span class="sig-paren">(</span><em>chunk</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.response.Response.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>writes a response content chunk</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.response.Response.end">
+<code class="descname">end</code><span class="sig-paren">(</span><em>chunk=None</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.response.Response.end" title="Permalink to this definition">¶</a></dt>
+<dd><p>ends the request stream (option chunk can be provided).</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="crocus.response.Response.finish">
+<code class="descname">finish</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#crocus.response.Response.finish" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a finish code to notify the application that the middleware should end the request</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="server">
+<h2>2.6. Server<a class="headerlink" href="#server" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="crocus.helpers.Server">
+<em class="property">class </em><code class="descclassname">crocus.helpers.</code><code class="descname">Server</code><span class="sig-paren">(</span><em>handlers=RouteDict()</em>, <em>middlewares={}</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.helpers.Server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of aiohttp.server.ServerHttpProtocol to handle event loop requests</p>
+</dd></dl>
+
+</div>
+<div class="section" id="helpers">
+<h2>2.7. Helpers<a class="headerlink" href="#helpers" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="crocus.helpers.DynamicObject">
+<em class="property">class </em><code class="descclassname">crocus.helpers.</code><code class="descname">DynamicObject</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.helpers.DynamicObject" title="Permalink to this definition">¶</a></dt>
+<dd><p>An object that can store any property, returns None if the property does not exist.</p>
+<dl class="function">
+<dt id="crocus.helpers.DynamicObject.from_json">
+<code class="descname">from_json</code><span class="sig-paren">(</span><em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.helpers.DynamicObject.from_json" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates a instance object from a json string</p>
+</dd></dl>
+
+<dl class="function">
+<dt>
+<code class="descname">from_dict(data):</code></dt>
+<dd><p>creates an instance object from a dictionary</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="crocus.helpers.Dict">
+<em class="property">class </em><code class="descclassname">crocus.helpers.</code><code class="descname">Dict</code><a class="headerlink" href="#crocus.helpers.Dict" title="Permalink to this definition">¶</a></dt>
+<dd><p>A dictionary (collections.MutableMapping) used to store headers. It is case insensitive when retrieving values.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="crocus.helpers.RouteDict">
+<em class="property">class </em><code class="descclassname">crocus.helpers.</code><code class="descname">RouteDict</code><a class="headerlink" href="#crocus.helpers.RouteDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of collections.MutableMapping it stores the server routes and handlers.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="examples.html" class="btn btn-neutral float-right" title="3. Examples" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="introduction.html" class="btn btn-neutral" title="1. Introduction" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Leonardo Rossetti.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
