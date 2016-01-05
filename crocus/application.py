@@ -1,7 +1,8 @@
 import asyncio
-from urllib.parse import urlparse, parse_qsl
+import inspect
 from crocus.server import Server
 from crocus.helpers import RouteDict, DynamicObject
+from crocus import errors
 
 methods = ('post', 'get', 'put', 'delete', 'patch', 'options', 'head', 'trace', 'connect')
 
@@ -32,6 +33,8 @@ class Application(object):
     [self.middlewares.append(item) for item in args]
 
   def add_handler(self, method, path, fn):
+    if inspect.iscoroutinefunction(fn) is False:
+      raise errors.HandlerTypeError(fn.__name__)
     self.handlers['%s:%s' % (method, path)] = fn
   
   def post(self, path, fn):

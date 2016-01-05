@@ -1,4 +1,3 @@
-import sys;sys.path.append('../../')
 from crocus import Crocus
 from . import handlers, middlewares
 
