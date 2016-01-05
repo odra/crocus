@@ -3,6 +3,7 @@ from urllib.parse import urlparse, parse_qsl
 from crocus.server import Server
 from crocus.helpers import RouteDict, DynamicObject
 
+methods = ('post', 'get', 'put', 'delete', 'patch', 'options', 'head', 'trace', 'connect')
 
 class Application(object):
   def __init__(self, loop=asyncio.get_event_loop(), handlers=RouteDict(), middlewares=[], **kwargs):
@@ -61,17 +62,10 @@ class Application(object):
 
   def connect(self, path, fn):
     self.add_handler('connect', path, fn)
-
-  def all(self, fn):
-    self.post(fn)
-    self.get(fn)
-    self.put(fn)
-    self.delete(fn)
-    self.patch(fn)
-    self.options(fn)
-    self.head(fn)
-    self.trace(fn)
-    self.connect(fn)
+  
+  def all(self, path, fn):
+    for method in methods:
+      getattr(self, method)(path, fn)
   
   def run(self, host='127.0.0.1', port=5000, **kwargs):
     self.config.host = host

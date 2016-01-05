@@ -5,7 +5,7 @@ from . import handlers, middlewares
 app = Crocus()
 
 #root routes
-app.get('/', handlers.root.root)
+app.all('/', handlers.root.root)
 
 #users routes
 app.post('/users', handlers.users.create)
