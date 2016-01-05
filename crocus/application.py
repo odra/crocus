@@ -23,6 +23,7 @@ class Application(object):
     self.config.default_encoding = 'utf8'
     self.config.keep_alive = '75'
     self.config.debug = True
+    self.config.default_status = 200
 
   def error(self, *args):
     [self.errors.append(item) for item in args]

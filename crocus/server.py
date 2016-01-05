@@ -28,7 +28,7 @@ class Server(aiohttp.server.ServerHttpProtocol):
     handler_key = '%s:%s' % (request.method.lower(), request.path)
     (handler, params) = self.handlers.get(handler_key)
     response = Response(
-      self.writer, 200, http_version=message.version
+      self.writer, self.config.default_status, http_version=message.version
     )
     response.encoding = encoding
     response.header('Content-Type', 'text/plain')
