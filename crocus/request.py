@@ -19,6 +19,7 @@ class Request(DynamicObject):
     self.content_type = None
     self.params = kwargs.get('params', DynamicObject())
     self.encoding = kwargs.get('encoding', 'utf8')
+    self.app = kwargs.get('app', DynamicObject())
 
   def __repr__(self):
     params = (self.method, self.path, self.params, self.headers, self.body)

@@ -10,14 +10,15 @@ class Server(aiohttp.server.ServerHttpProtocol):
     self.handlers = kwargs.get('handlers', RouteDict())
     self.middlewares = kwargs.get('middlewares', [])
     self.config = kwargs.get('config', DynamicObject())
-
+  
   async def handle_request(self, message, payload):
     encoding = self.config.default_encoding
     req_input = {
       'method': message.method,
       'path': message.path,
       'headers': message.headers,
-      'encoding': self.config.default_encoding
+      'encoding': self.config.default_encoding,
+      'app': self.config
     }
     body = await payload.read()
     if body:

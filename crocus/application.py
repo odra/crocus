@@ -30,9 +30,6 @@ class Application(object):
   def use(self, *args):
     [self.middlewares.append(item) for item in args]
 
-  def middleware(self, fn):
-    self.use(fn)
-
   def add_handler(self, method, path, fn):
     self.handlers['%s:%s' % (method, path)] = fn
   
