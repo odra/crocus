@@ -179,14 +179,8 @@
 
 <dl class="function">
 <dt id="crocus.application.Application.use">
-<code class="descname">use</code><span class="sig-paren">(</span><em>fn</em>, <em>fn...*args</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.use" title="Permalink to this definition">¶</a></dt>
-<dd><p>Adds function(s) handle as a middleware.</p>
-</dd></dl>
-
-<dl class="function">
-<dt id="crocus.application.Application.middleware">
-<code class="descname">middleware</code><span class="sig-paren">(</span><em>fn</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.middleware" title="Permalink to this definition">¶</a></dt>
-<dd><p>Same as &#8220;use&#8221; method, but should be used as a decorator</p>
+<code class="descname">use</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.use" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds async function(s) handlers as a middleware.</p>
 </dd></dl>
 
 <dl class="function">
@@ -244,6 +238,12 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="crocus.application.Application.all">
+<code class="descname">all</code><span class="sig-paren">(</span><em>path</em>, <em>fn</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds a handler for all http methods whithin given path.</p>
+</dd></dl>
+
+<dl class="function">
 <dt id="crocus.application.Application.run">
 <code class="descname">run</code><span class="sig-paren">(</span><em>host='127.0.0.1'</em>, <em>port=5000</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.application.Application.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>Runs the application in a given host and port.</p>
@@ -255,11 +255,28 @@
 <div class="section" id="handlers">
 <h2>2.2. Handlers<a class="headerlink" href="#handlers" title="Permalink to this headline">¶</a></h2>
 <p>Every request handler is a python async function which uses two arguments: a request and a response.</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">async</span> <span class="k">def</span> <span class="nf">handler</span><span class="p">(</span><span class="n">req</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+  <span class="n">data</span> <span class="o">=</span> <span class="n">await</span> <span class="n">some_action</span><span class="p">(</span><span class="n">req</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+  <span class="n">res</span><span class="o">.</span><span class="n">status</span> <span class="o">=</span> <span class="mi">201</span> <span class="c">#default is 200</span>
+  <span class="n">res</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+  <span class="n">await</span> <span class="n">res</span><span class="o">.</span><span class="n">end</span><span class="p">()</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="middlewares">
 <h2>2.3. Middlewares<a class="headerlink" href="#middlewares" title="Permalink to this headline">¶</a></h2>
 <p>Middlewares use the same async functions as handlers, but they are executed before the handler itself.</p>
 <p>Middlewares are useful for changing or validating request data.You can also end a request in a middleware before it reaches the designated handler, in this case the middleware functions needs to return the &#8220;finish&#8221; method from the response object (otherwise the request will go on).</p>
+<div class="code python highlight-python"><div class="highlight"><pre>async def bodyparser(req, res):
+  try:
+    req.body = json.loads(req.body)
+  except except json.decoder.JSONDecodeError:
+    res.status = 400
+    res.write(json.dumps({&#39;error&#39;: &#39;invalid json&#39;}))
+    await res.end()
+    return res.finish() #mandatory if middleware needs to end the current request
+</pre></div>
+</div>
 </div>
 <div class="section" id="request">
 <h2>2.4. Request<a class="headerlink" href="#request" title="Permalink to this headline">¶</a></h2>
@@ -306,6 +323,12 @@
 <dt id="crocus.request.Request.params">
 <code class="descname">params</code><a class="headerlink" href="#crocus.request.Request.params" title="Permalink to this definition">¶</a></dt>
 <dd><p>DynamicObject that stores dyanmic url parameters.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="crocus.request.Request.app">
+<code class="descname">app</code><a class="headerlink" href="#crocus.request.Request.app" title="Permalink to this definition">¶</a></dt>
+<dd><p>A DynamicObject which stores the application config data</p>
 </dd></dl>
 
 <dl class="function">
@@ -373,8 +396,9 @@
 <h2>2.6. Server<a class="headerlink" href="#server" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="crocus.helpers.Server">
-<em class="property">class </em><code class="descclassname">crocus.helpers.</code><code class="descname">Server</code><span class="sig-paren">(</span><em>handlers=RouteDict()</em>, <em>middlewares={}</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.helpers.Server" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implementation of aiohttp.server.ServerHttpProtocol to handle event loop requests</p>
+<em class="property">class </em><code class="descclassname">crocus.helpers.</code><code class="descname">Server</code><span class="sig-paren">(</span><em>handlers=RouteDict()</em>, <em>middlewares={}</em>, <em>config=DynamicObject()</em><span class="sig-paren">)</span><a class="headerlink" href="#crocus.helpers.Server" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of aiohttp.server.ServerHttpProtocol to handle event loop requests.</p>
+<p>Config stores the application config data to be used in every request handler.</p>
 </dd></dl>
 
 </div>

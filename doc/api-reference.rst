@@ -34,13 +34,9 @@ Application
     
     Adds a handler for a given http method and path.
 
-  .. function:: use(fn, fn...*args)
+  .. function:: use(*args)
 
-    Adds function(s) handle as a middleware.
-
-  .. function:: middleware(fn)
-
-    Same as "use" method, but should be used as a decorator
+    Adds async function(s) handlers as a middleware.
 
   .. function:: post(path, fn)
 
@@ -77,6 +73,10 @@ Application
   .. function:: connect(path, fn)
 
     Adds a connect handler for a given path.
+
+  .. function:: all(path, fn)
+
+    Adds a handler for all http methods whithin given path.
   
   .. function:: run(host='127.0.0.1', port=5000)
 
@@ -89,6 +89,14 @@ Handlers
 
 Every request handler is a python async function which uses two arguments: a request and a response.
 
+.. code:: python
+
+  async def handler(req, res):
+    data = await some_action(req.data)
+    res.status = 201 #default is 200
+    res.write(json.dumps(data))
+    await res.end()
+
 ***********
 Middlewares
 ***********
@@ -96,6 +104,17 @@ Middlewares
 Middlewares use the same async functions as handlers, but they are executed before the handler itself.
 
 Middlewares are useful for changing or validating request data.You can also end a request in a middleware before it reaches the designated handler, in this case the middleware functions needs to return the "finish" method from the response object (otherwise the request will go on).
+
+.. code:: python
+
+  async def bodyparser(req, res):
+    try:
+      req.body = json.loads(req.body)
+    except except json.decoder.JSONDecodeError:
+      res.status = 400
+      res.write(json.dumps({'error': 'invalid json'}))
+      await res.end()
+      return res.finish() #mandatory if middleware needs to end the current request
 
 *******
 Request
@@ -132,6 +151,10 @@ Request
   .. attribute:: params
 
     DynamicObject that stores dyanmic url parameters.
+
+  .. attribute:: app
+
+    A DynamicObject which stores the application config data
 
   .. function:: prepare()
 
@@ -183,9 +206,11 @@ Server
 
 .. currentmodule:: crocus.helpers
 
-.. class:: Server(handlers=RouteDict(), middlewares={})
+.. class:: Server(handlers=RouteDict(), middlewares={}, config=DynamicObject())
 
-  Implementation of aiohttp.server.ServerHttpProtocol to handle event loop requests
+  Implementation of aiohttp.server.ServerHttpProtocol to handle event loop requests.
+
+  Config stores the application config data to be used in every request handler.
 
 *******
 Helpers
