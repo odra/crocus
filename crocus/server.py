@@ -12,6 +12,7 @@ class Server(aiohttp.server.ServerHttpProtocol):
     self.config = kwargs.get('config', DynamicObject())
 
   async def handle_request(self, message, payload):
+    encoding = self.config.default_encoding
     req_input = {
       'method': message.method,
       'path': message.path,
@@ -28,12 +29,11 @@ class Server(aiohttp.server.ServerHttpProtocol):
     response = Response(
       self.writer, 200, http_version=message.version
     )
-    response.encoding = self.config.default_encoding
-    response.header('Content-Type', 'application/json')
+    response.encoding = encoding
+    response.header('Content-Type', 'text/plain')
     if handler is None:
       response.status = 404
-      response.send_headers()
-      not_found_params = (request.method.encode(self.config.default_encoding), request.path.encode(self.config.default_encoding))
+      not_found_params = (request.method.encode(encoding), request.path.encode(encoding))
       response.write('%s %s NOT FOUND' % not_found_params)
       return await response.end()
     request.params = DynamicObject.from_dict(params)

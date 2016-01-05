@@ -11,7 +11,6 @@ class Application(object):
     self.middlewares = middlewares
     self.config = DynamicObject()
     self.set_default_config()
-    self.errors = []
     for item in kwargs:
       setattr(self.config, item, kwargs[item])
   
@@ -21,6 +20,7 @@ class Application(object):
 
   def set_default_config(self):
     self.config.default_encoding = 'utf8'
+    self.config.keep_alive = '75'
     self.config.debug = True
 
   def error(self, *args):
@@ -61,18 +61,24 @@ class Application(object):
 
   def connect(self, path, fn):
     self.add_handler('connect', path, fn)
+
+  def all(self, fn):
+    self.post(fn)
+    self.get(fn)
+    self.put(fn)
+    self.delete(fn)
+    self.patch(fn)
+    self.options(fn)
+    self.head(fn)
+    self.trace(fn)
+    self.connect(fn)
   
   def run(self, host='127.0.0.1', port=5000, **kwargs):
-    debug = kwargs.get('debug', True)
-    keep_alive = kwargs.get('keep_alive', 75)
-    self.config.debug = debug
     self.config.host = host
     self.config.port = port
-    self.config.debug = debug
-    self.config.keep_alive = keep_alive
     server_input = {
-      'debug': debug,
-      'keep_alive': keep_alive,
+      'debug': self.config.debug,
+      'keep_alive': self.config.keep_alive,
       'handlers': self.handlers,
       'middlewares': self.middlewares,
       'config': self.config
