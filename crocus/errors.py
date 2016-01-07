@@ -1,5 +1,7 @@
 class BaseError(Exception):
-  pass
+  def __repr__(self):
+    return '<BaseError>'
+
 
 
 class HandlerTypeError(BaseError):
@@ -9,3 +11,4 @@ class HandlerTypeError(BaseError):
 
   def __repr__(self):
     return '<HandlerTypeError(name=%s)>' % self.name
+

@@ -2,6 +2,7 @@ import aiohttp.server
 from crocus.request import Request
 from crocus.response import Response
 from crocus.helpers import RouteDict, DynamicObject
+import urllib.parse
 
 
 class Server(aiohttp.server.ServerHttpProtocol):
@@ -10,6 +11,13 @@ class Server(aiohttp.server.ServerHttpProtocol):
     self.handlers = kwargs.get('handlers', RouteDict())
     self.middlewares = kwargs.get('middlewares', [])
     self.config = kwargs.get('config', DynamicObject())
+
+  async def log_request(self, req, res):
+    if len(req.query) > 0:
+      path = '%s?%s' % (req.path, urllib.parse.urlencode(req.query))
+    else:
+      path = req.path
+    self.config.logger.info('[%s] %s %s' % (res.status, req.method, path))
   
   async def handle_request(self, message, payload):
     encoding = self.config.default_encoding
@@ -36,10 +44,16 @@ class Server(aiohttp.server.ServerHttpProtocol):
       response.status = 404
       not_found_params = (request.method.encode(encoding), request.path.encode(encoding))
       response.write('%s %s NOT FOUND' % not_found_params)
-      return await response.end()
+      await response.end()
+      await self.log_request(request, response)
+      return response.finish()
     request.params = DynamicObject.from_dict(params)
     for item in self.middlewares:
       middleware = await item(request, response)
       if middleware == Response.FINISH_CODE:
+        await self.log_request(request, response)
         return middleware
-    return await handler(request, response)
+    await handler(request, response)
+    await self.log_request(request, response)
+    return response.finish()
+

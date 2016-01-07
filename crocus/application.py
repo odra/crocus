@@ -3,8 +3,10 @@ import inspect
 from crocus.server import Server
 from crocus.helpers import RouteDict, DynamicObject
 from crocus import errors
+import logging
 
 methods = ('post', 'get', 'put', 'delete', 'patch', 'options', 'head', 'trace', 'connect')
+
 
 class Application(object):
   def __init__(self, loop=asyncio.get_event_loop(), handlers=RouteDict(), middlewares=[], **kwargs):
@@ -25,15 +27,19 @@ class Application(object):
     self.config.keep_alive = '75'
     self.config.debug = True
     self.config.default_status = 200
-
-  def error(self, *args):
-    [self.errors.append(item) for item in args]
+    self.config.logger = logging.getLogger(__name__)
+    level = logging.DEBUG
+    if self.config.debug is False:
+      level = logging.INFO
+    self.config.logger.setLevel(level)
+    logging.basicConfig(format='%(levelname)s:%(message)s', level=level)
 
   def use(self, *args):
     [self.middlewares.append(item) for item in args]
 
   def add_handler(self, method, path, fn):
     if inspect.iscoroutinefunction(fn) is False:
+      self.config.logger.error('Hanlder %s should be a coroutine.' % fn.__name__)
       raise errors.HandlerTypeError(fn.__name__)
     self.handlers['%s:%s' % (method, path)] = fn
   
@@ -65,8 +71,7 @@ class Application(object):
     self.add_handler('connect', path, fn)
   
   def all(self, path, fn):
-    for method in methods:
-      getattr(self, method)(path, fn)
+    [getattr(self, method)(path, fn) for method in methods]
   
   def run(self, host='127.0.0.1', port=5000, **kwargs):
     self.config.host = host
@@ -80,9 +85,9 @@ class Application(object):
     }
     f = self.loop.create_server(lambda: Server(**server_input), host, str(port))
     srv = self.loop.run_until_complete(f)
-    print('==> Running on http://%s:%s' % (host, port))
+    self.config.logger.info('Running on http://%s:%s' % (host, port))  
     try:
       self.loop.run_forever()
     except KeyboardInterrupt:
-      print('==> Stopped http://%s:%s' % (host, port))
+      self.config.logger.info('Stopped http://%s:%s' % (host, port))
 
