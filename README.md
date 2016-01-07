@@ -47,13 +47,6 @@ if __name__ == '__main__':
   app.run(host='127.0.0.1', port=5000)
 ```
 
-## Todos
-
-- Automted tests
-- Logging
-- Smart error handling
-- Profiling
-
 # License
 
 Crocus is licensed under the MIT open source license.
